@@ -22,7 +22,6 @@
   "dependencies": {
     "@vitejs/plugin-react": "latest",
     "better-sqlite3-multiple-ciphers": "13.0.3",
-    "electron": "latest",
     "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest"
@@ -32,6 +31,7 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "electron": "latest",
     "electron-builder": "latest",
     "electron-vite": "latest",
     "typescript": "latest",
@@ -46,6 +46,7 @@
     ],
     "mac": {
       "category": "public.app-category.finance",
+      "icon": "resources/icon.png",
       "target": [
         "dmg",
         "zip"

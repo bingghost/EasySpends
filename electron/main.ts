@@ -216,15 +216,25 @@ function registerIpcHandlers() {
 }
 
 function trayIcon() {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><rect x="1" y="1" width="16" height="16" rx="5" fill="#477BD4"/><path d="M5 12.2V5.8h2.2c1.9 0 3 1 3 2.6S9.1 11 7.2 11H6.7v1.2H5Zm1.7-2.7h.45c.85 0 1.35-.38 1.35-1.1s-.5-1.1-1.35-1.1H6.7v2.2Z" fill="white"/><path d="M11.3 5.8h1.7v6.4h-1.7z" fill="white"/></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path fill="black" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h7.5A2.25 2.25 0 0 1 15 4.25V5h.25A1.75 1.75 0 0 1 17 6.75v4.5A1.75 1.75 0 0 1 15.25 13H15v.75A2.25 2.25 0 0 1 12.75 16h-7.5A2.25 2.25 0 0 1 3 13.75v-9.5Zm2-.75a.75.75 0 0 0 0 1.5h8.5v-.75a.75.75 0 0 0-.75-.75H5Zm9.75 3H11a2.5 2.5 0 0 0 0 5h3.75a.75.75 0 0 0 .75-.75v-3.5a.75.75 0 0 0-.75-.75ZM11 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>`
   const image = nativeImage.createFromDataURL(`data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`)
-  if (process.platform === 'darwin') image.setTemplateImage(false)
+  if (process.platform === 'darwin') image.setTemplateImage(true)
   return image
 }
 
+function hideWindowToTray(window: BrowserWindow) {
+  window.hide()
+  if (process.platform === 'darwin') app.dock?.hide()
+}
+
 function showMainWindow() {
+  if (process.platform === 'darwin') void app.dock?.show()
   if (!mainWindow || mainWindow.isDestroyed()) mainWindow = createWindow(false)
-  else { mainWindow.show(); mainWindow.focus() }
+  else {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.show()
+    mainWindow.focus()
+  }
 }
 
 function createTray() {
@@ -262,13 +272,16 @@ function createWindow(hidden = false) {
   window.on('close', (event) => {
     if (!isQuitting && keepInTray) {
       event.preventDefault()
-      window.hide()
+      hideWindowToTray(window)
     }
+  })
+  window.on('minimize', () => {
+    if (keepInTray) hideWindowToTray(window)
   })
   window.on('closed', () => {
     if (mainWindow === window) mainWindow = undefined
   })
-  if (hidden) window.hide()
+  if (hidden) hideWindowToTray(window)
   if (process.env.ELECTRON_RENDERER_URL) {
     void window.loadURL(process.env.ELECTRON_RENDERER_URL)
   } else {
@@ -278,6 +291,10 @@ function createWindow(hidden = false) {
 }
 
 if (hasSingleInstanceLock) app.whenReady().then(() => {
+  if (process.platform === 'darwin' && !app.isPackaged) {
+    const icon = nativeImage.createFromPath(join(__dirname, '../../resources/icon.png'))
+    if (!icon.isEmpty()) app.dock?.setIcon(icon)
+  }
   initializeFinanceService()
   registerIpcHandlers()
   createTray()

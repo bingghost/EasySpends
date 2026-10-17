@@ -14,9 +14,6 @@ importers:
       better-sqlite3-multiple-ciphers:
         specifier: 13.0.3
         version: 13.0.3
-      electron:
-        specifier: latest
-        version: 43.4.1(supports-color@7.2.0)
       lucide-react:
         specifier: latest
         version: 1.33.0(react@19.2.8)
@@ -39,6 +36,9 @@ importers:
       '@types/react-dom':
         specifier: latest
         version: 19.2.4(@types/react@19.2.18)
+      electron:
+        specifier: latest
+        version: 43.4.1(supports-color@7.2.0)
       electron-builder:
         specifier: latest
         version: 26.15.3(electron-builder-squirrel-windows@26.15.3)(supports-color@7.2.0)
