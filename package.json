@@ -17,7 +17,7 @@
     "test:security": "node scripts/security-smoke.cjs",
     "preview": "electron-vite preview",
     "dist:mac": "pnpm build && electron-builder --mac",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "install-electron && electron-builder install-app-deps"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
