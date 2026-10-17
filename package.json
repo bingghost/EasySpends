@@ -1,0 +1,55 @@
+{
+  "name": "easyspends",
+  "version": "0.1.0",
+  "description": "A local-first personal finance manager for macOS.",
+  "main": "out/main/main.js",
+  "author": "bobby",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "test:db": "node scripts/database-smoke.cjs",
+    "test:accounts": "node scripts/account-transfer-smoke.cjs",
+    "test:ledger": "node scripts/ledger-smoke.cjs",
+    "test:analytics": "node scripts/analytics-budget-smoke.cjs",
+    "test:automation": "node scripts/automation-smoke.cjs",
+    "test:security": "node scripts/security-smoke.cjs",
+    "preview": "electron-vite preview",
+    "dist:mac": "pnpm build && electron-builder --mac",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "better-sqlite3-multiple-ciphers": "13.0.3",
+    "electron": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "electron-builder": "latest",
+    "electron-vite": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  },
+  "build": {
+    "appId": "com.easyspends.app",
+    "productName": "EasySpends",
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.finance",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    }
+  }
+}

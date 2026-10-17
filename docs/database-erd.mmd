@@ -1,0 +1,88 @@
+erDiagram
+    LEDGERS ||--o{ ACCOUNTS : contains
+    LEDGERS ||--o{ CATEGORIES : defines
+    LEDGERS ||--o{ PAYEES : has
+    LEDGERS ||--o{ TRANSACTIONS : records
+    LEDGERS ||--o{ BUDGETS : plans
+    LEDGERS ||--o{ TAGS : uses
+    LEDGERS ||--o{ ATTACHMENTS : stores
+    LEDGERS ||--o{ IMPORT_JOBS : receives
+    LEDGERS ||--o{ EXCHANGE_RATES : applies
+
+    ACCOUNTS ||--o{ ACCOUNTS : parent
+    CATEGORIES ||--o{ CATEGORIES : parent
+    PAYEES ||--o{ TRANSACTIONS : selected_by
+    TRANSACTIONS ||--o{ POSTINGS : changes
+    TRANSACTIONS ||--o{ TRANSACTION_SPLITS : allocates
+    TRANSACTIONS ||--o{ TRANSACTION_TAGS : labeled
+    TRANSACTIONS ||--o{ ATTACHMENTS : evidence
+    CATEGORIES ||--o{ TRANSACTION_SPLITS : classifies
+    ACCOUNTS ||--o{ POSTINGS : receives
+    TAGS ||--o{ TRANSACTION_TAGS : labels
+
+    BUDGETS ||--o{ BUDGET_ALLOCATIONS : contains
+    CATEGORIES ||--o{ BUDGET_ALLOCATIONS : limits
+
+    RECURRING_RULES ||--o{ RECURRING_RULE_RUNS : schedules
+    RECURRING_RULE_RUNS ||--o| TRANSACTIONS : creates
+    IMPORT_JOBS ||--o{ IMPORT_ROWS : parses
+    IMPORT_ROWS ||--o| TRANSACTIONS : imports
+
+    LEDGERS {
+        text id PK
+        text name
+        text base_currency_code FK
+        text timezone
+    }
+    ACCOUNTS {
+        text id PK
+        text ledger_id FK
+        text parent_id FK
+        text account_type
+        text currency_code FK
+    }
+    TRANSACTIONS {
+        text id PK
+        text ledger_id FK
+        text transaction_type
+        text occurred_at
+        integer total_minor
+        text source
+    }
+    POSTINGS {
+        text id PK
+        text transaction_id FK
+        text account_id FK
+        integer amount_minor
+        integer base_amount_minor
+    }
+    TRANSACTION_SPLITS {
+        text id PK
+        text transaction_id FK
+        text category_id FK
+        integer amount_minor
+    }
+    BUDGETS {
+        text id PK
+        text budgeting_method
+        text period_type
+        text currency_code FK
+    }
+    BUDGET_ALLOCATIONS {
+        text id PK
+        text budget_id FK
+        text category_id FK
+        integer planned_minor
+    }
+    RECURRING_RULES {
+        text id PK
+        text frequency
+        text next_run_date
+        text template_json
+    }
+    IMPORT_JOBS {
+        text id PK
+        text source_type
+        text source_sha256
+        text status
+    }
