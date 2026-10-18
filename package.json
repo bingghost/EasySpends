@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "code:intel": "node scripts/ts-code-intel.mjs",
     "test:db": "node scripts/database-smoke.cjs",
     "test:accounts": "node scripts/account-transfer-smoke.cjs",
     "test:ledger": "node scripts/ledger-smoke.cjs",
@@ -20,22 +21,24 @@
     "postinstall": "install-electron && electron-builder install-app-deps"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
+    "@vitejs/plugin-react": "6.1.0",
     "better-sqlite3-multiple-ciphers": "13.0.3",
-    "lucide-react": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "lucide-react": "1.33.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "latest",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "electron": "latest",
-    "electron-builder": "latest",
-    "electron-vite": "latest",
-    "typescript": "latest",
-    "vite": "latest"
+    "@ast-grep/cli": "0.51.0",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "electron": "43.4.1",
+    "electron-builder": "26.15.3",
+    "electron-vite": "5.0.0",
+    "typescript": "7.0.2",
+    "typescript6": "npm:@typescript/typescript6@6.0.2",
+    "vite": "8.2.2"
   },
   "build": {
     "appId": "com.easyspends.app",

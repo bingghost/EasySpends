@@ -1,8 +1,8 @@
 # Repository Guidelines
 
-## Project Structure & Module Organization
+## Project Goal and Structure
 
-EasySpends is a macOS-first Electron application. `src/App.tsx` coordinates renderer state and navigation; pages and dialogs live in `src/features/`, with shared display formatting in `src/format.ts`. There is no separate asset directory. `electron/main.ts` owns window lifecycle and background tasks, `electron/ipc/` registers finance handlers, and `electron/preload.ts` exposes the approved renderer API. Put persistence in `electron/database/repositories/`, schema changes in `electron/database/migrations.ts`, business rules in `electron/domain/`, and backup or background behavior in `electron/services/`. Design notes live in `docs/`. Test scripts live in `scripts/`; `out/` is generated build output.
+EasySpends is a local-first Electron finance app. `src/App.tsx` coordinates renderer state; pages and dialogs live in `src/features/`. `electron/main.ts` owns window lifecycle, `electron/ipc/` registers handlers, and `electron/preload.ts` exposes the renderer API. Put persistence in `electron/database/repositories/`, migrations in `electron/database/migrations.ts`, rules in `electron/domain/`, and backup behavior in `electron/services/`. Icons are in `resources/`, documentation in `docs/`, utilities in `scripts/`, and generated bundles in `out/`.
 
 ## Build, Test, and Development Commands
 
@@ -15,16 +15,18 @@ EasySpends is a macOS-first Electron application. `src/App.tsx` coordinates rend
 
 ## Coding Style & Naming Conventions
 
-Use TypeScript for application code and two-space indentation, matching existing files. Follow the current no-semicolon style. Name React components in `PascalCase`, functions and variables in `camelCase`, and module files in `kebab-case` (for example, `import-service.ts`). Keep SQL in repositories and validate untrusted IPC input in the domain layer. There is currently no configured formatter or linter; run the type-check and build before submitting changes.
+Use TypeScript and two-space indentation. Follow the no-semicolon style. Name React components in `PascalCase`, functions and variables in `camelCase`, and modules in `kebab-case` (for example, `import-service.ts`). Keep SQL in repositories and validate untrusted IPC input in the domain layer. No formatter or linter is configured; run type-check and build before submitting.
+
+Do not edit `node_modules/`, `out/`, task-runner state, generated packages, or the local Python runtime. Do not expose Node.js, filesystem access, raw SQL, secrets, or encryption keys through preload. Treat migrations, encryption, key storage, backup, and restore work as data-loss-sensitive.
 
 ## Testing Guidelines
 
-The project uses Node-based smoke scripts (`scripts/*-smoke.cjs`), not a test framework, and has no coverage threshold. Add focused checks for behavior that changes balances, imports, migrations, scheduling, or backup recovery. Run the relevant smoke script plus `pnpm exec tsc --noEmit` and `pnpm build`; run all six smoke scripts for cross-cutting changes.
+The project uses Node smoke scripts (`scripts/*-smoke.cjs`) and has no coverage threshold. Add focused checks for balances, imports, migrations, scheduling, or recovery. Run the relevant smoke script, type-check, and build; run all six scripts for cross-cutting changes.
+
+## AI Workflow and Code Intelligence
+
+Read `docs/ai-development-workflow.md` before using automation. Validate plans with `.codex-tasks/run.sh validate`; run them with `.codex-tasks/run.sh run --sandboxed`. Automatic commit and push are disabled. Use `rg` for text, `pnpm exec ast-grep run` for TypeScript structure, and `pnpm code:intel` for symbols, definitions, references, implementations, and call hierarchy. These commands read live source and need no index refresh.
 
 ## Commit & Pull Request Guidelines
 
-This checkout has no Git history, so no existing commit-message convention can be verified. Use short, imperative subjects that name the change. Pull requests should explain user-visible behavior, data migration or security impact, and commands run; include screenshots for renderer changes and link the related issue when one exists.
-
-## Security & Data Handling
-
-Keep database access in the main process. Do not expose Node.js, filesystem access, or raw SQL through the preload API. Treat changes to encryption, key storage, migrations, and restore paths as data-loss-sensitive; verify them with `pnpm test:security` and a recovery scenario.
+Use short, imperative commit subjects. Pull requests should describe user-visible behavior, data or security impact, and commands run; include screenshots for renderer changes and link the issue when one exists. Never commit `.env`, databases, task-runner state, or local runtime files.
