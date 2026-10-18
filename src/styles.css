@@ -34,6 +34,7 @@ button:disabled { cursor: wait; opacity: .65; }
 .loading-mark { width: 48px; height: 48px; border-radius: 16px; font-size: 24px; }
 
 .app-shell { min-height: 100vh; display: flex; }
+.window-drag-region { -webkit-app-region: drag; app-region: drag; position: fixed; z-index: 1000; top: 0; right: 0; left: 0; height: 38px; user-select: none; }
 .sidebar { position: fixed; inset: 0 auto 0 0; width: 254px; display: flex; flex-direction: column; padding: 32px 19px 22px; border-right: 1px solid var(--line); background: rgba(251, 252, 253, .94); }
 .brand-row { display: flex; align-items: center; gap: 11px; padding: 0 11px 29px; }
 .brand-mark { width: 34px; height: 34px; border-radius: 11px; font-size: 18px; }

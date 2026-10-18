@@ -295,6 +295,7 @@ function App() {
 
   return (
     <div className="app-shell">
+      <div className="window-drag-region" aria-hidden="true" />
       <aside className="sidebar">
         <div className="brand-row">
           <div className="brand-mark">E</div>
